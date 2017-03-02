@@ -12,7 +12,7 @@ Supbine helps you collect all your inquiries in one platform, including Facebook
 
 == Description ==
 
-Supbine enables you to recieve inquiries on a large amount of channels. No matter if your customer contacts you using Facebook, mail or widget, you will have one place from where you can view and reply. Tickets also enabels you to assing to your co-workers.
+Supbine enables you to recieve inquiries on a large amount of channels. No matter if your customer contacts you using Facebook, mail or widget, you will have one place from where you can view and reply. Tickets also enables you to assign to your co-workers.
 
 Widget enables you to add a variety of features to your site. Want live chat? Want to be able to start chats with your visitors? Widget helps you enable all of these features right on your site. Installation is easy, and we provide plugins for most common frameworks.
 
