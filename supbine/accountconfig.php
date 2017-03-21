@@ -1,19 +1,34 @@
 <?php
 
-function account_config() {
+function SUPBINE_account_config() {
+	$default_supbine_companyId = null;
+	$defualt_supbine_locale = "en_US";
 
 	if ($_GET["action"] == "deactivate") {
-		update_option('supbine_companyId', null);
-		update_option('supbine_locale', "en_US");
+		update_option('supbine_companyId', $default_supbine_companyId);
+		update_option('supbine_locale', $defualt_supbine_locale);
 	}
 
 	if ($_GET["action"] == "update") {
-		update_option('supbine_companyId', $_POST["supbine_companyId"]);
-		update_option('supbine_locale', $_POST["supbine_locale"]);
+		if (!isset($_POST['SUPBINE_wpnonce']) ||
+			!wp_verify_nonce($_POST['SUPBINE_wpnonce'], 'SUPBINE_update_action')){
+			print 'Sorry, your nonce did not verify.';
+			exit;
+		} else {
+			$safe_supbine_companyId = intval($_POST["supbine_companyId"]);
+			$safe_supbine_locale = sanitize_text_field($_POST["supbine_locale"]);
+
+			if (!$safe_supbine_companyId) {
+				$safe_supbine_companyId = $default_supbine_companyId;
+			}
+
+			update_option('supbine_companyId', $safe_supbine_companyId);
+			update_option('supbine_locale', $safe_supbine_locale);
+		}
 	}
 
-	$companyId = get_option('supbine_companyId', null);
-	$locale = get_option('supbine_locale', "en_US");
+	$companyId = get_option('supbine_companyId', $default_supbine_companyId);
+	$locale = get_option('supbine_locale', $defualt_supbine_locale);
 
 	?>
 	<div class="wrap">
@@ -31,7 +46,7 @@ function account_config() {
 							if ($companyId != null){
 								?>
 								<div class="supbine-success">
-									<p><strong>Success!</strong> You are currently using company id: <?=$companyId?> with language: <?=$locale?></p>
+									<p><strong>Success!</strong> You are currently using company id: <?php echo esc_textarea($companyId); ?> with language: <?php echo esc_textarea($locale); ?></p>
 									To deactivate the widget, click <a href="admin.php?page=supbine&action=deactivate">here</a>.
 								</div>
 								<?php
@@ -45,6 +60,8 @@ function account_config() {
 						?>
 
 						<form method="post" action="admin.php?page=supbine&action=update">
+							<?php wp_nonce_field('SUPBINE_update_action', 'SUPBINE_wpnonce'); ?>
+
 							<table class="form-table">
 								<tbody>
 									<tr valign="top">
@@ -63,7 +80,6 @@ function account_config() {
 											</select>
 										</td>
 									</tr>
-
 								</tbody>
 							</table>
 
